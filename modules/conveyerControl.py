@@ -1,4 +1,3 @@
-
-class Robot():
+class ConveyerControl():
     def __init__(self) -> None:
         pass
