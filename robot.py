@@ -1,6 +1,7 @@
 from time import sleep
 from modules import Vision, ToolControl, StepperControl, ConveyerControl
 from configparser import ConfigParser
+from RPi.GPIO import cleanup
 
 
 class Robot():
@@ -38,7 +39,8 @@ class Robot():
 
 
 def sigintHandler(signal, frame):
-    print('Interrupted')
+    print('Exiting the program.')
+    cleanup()
     sys.exit(0)
 
 if __name__ == "__main__":
