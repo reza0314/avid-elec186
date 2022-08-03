@@ -16,9 +16,9 @@ class Vision():
         self.y_distance_per_pixel = y_distance
         self.circle_radius = circle_radius
         
-        print(self.x_distance_per_pixel,
-              self.y_distance_per_pixel, self.circle_radius)
-        pass
+        # print(self.x_distance_per_pixel,
+        #       self.y_distance_per_pixel, self.circle_radius)
+        
 
     def findCircles(self) -> List:
         _, image = self.cam.read()
