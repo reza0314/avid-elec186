@@ -1,4 +1,4 @@
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 from time import sleep
 
 
@@ -9,12 +9,12 @@ class StepperControl():
         self.direction_pin = direction_pin
         self.limit_switch_pin = limit_switch_pin
         self.state = True
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(self.signal_pin, GPIO.OUT)
-        # GPIO.setup(self.direction_pin, GPIO.OUT)
-        # GPIO.setup(self.limit_switch_pin, GPIO.IN, pull_up_down=GPIO.PUP_UP)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.signal_pin, GPIO.OUT)
+        GPIO.setup(self.direction_pin, GPIO.OUT)
+        GPIO.setup(self.limit_switch_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         self.position = 0
-        # self.calibrate_motor()
+        self.calibrate_motor()
         pass
 
     def calibrate_motor(self) -> None:
@@ -31,15 +31,17 @@ class StepperControl():
 
         return
 
-    def move(self) -> None:
-        if(self.state):
-            # GPIO.output(self.signal_pin,GPIO.HIGH)
-            # self.state = ! self.state
-            pass
-        else:
-            # GPIO.output(self.signal_pin,GPIO.LOW)
-            # self.state = ! self.state
-            pass
+    def stepForward(self) -> None:
+        GPIO.output(self.direction_pin,GPIO.HIGH)
+        GPIO.output(self.signal_pin,GPIO.HIGH)
+        sleep(0.01)
+        GPIO.output(self.signal_pin,GPIO.LOW)
+
+    def stepBackward(self)-> None:
+        GPIO.output(self.direction_pin,GPIO.LOW)
+        GPIO.output(self.signal_pin,GPIO.HIGH)
+        sleep(0.01)
+        GPIO.output(self.signal_pin,GPIO.LOW)
 
     def test(self) -> int:
         if(self.state):

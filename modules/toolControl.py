@@ -1,4 +1,4 @@
-import PRi.GPIO as GPIO
+import RPi as GPIO
 
 
 class ToolControl():

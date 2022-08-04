@@ -1,7 +1,8 @@
 from typing import List
-from cv2 import circle, medianBlur, Canny, cvtColor, resize, dilate, threshold, VideoCapture, HoughCircles, imshow, waitKey
+from cv2 import circle, medianBlur, Canny, cvtColor, resize, dilate, threshold, VideoCapture, HoughCircles, imshow, waitKey,HoughLinesP
 from cv2 import Mat, COLOR_BGR2GRAY, THRESH_BINARY, HOUGH_GRADIENT
-
+import numpy as np
+import cv2 as cv
 
 class Vision():
     cam = VideoCapture(0)
@@ -63,6 +64,21 @@ class Vision():
 
     # TODO implement following functions
     def findReference(self) -> None:
+        _, img = self.cam.read()
+        processed_image = cvtColor(img, COLOR_BGR2GRAY)
+        max_radius = min(processed_image.shape)//15
+        circles = HoughCircles(processed_image, HOUGH_GRADIENT,
+                              2, 50, param1=500, param2=1, minRadius=40, maxRadius=max_radius)
+        lines = HoughLinesP(processed_image,1,np.pi/180,40,minLineLength=200,maxLineGap=30)
+        circles = np.round(circles[0, :]).astype("int")
+        for x1,y1,x2,y2 in lines[0]:
+            for (x,y,r) in circles:
+                if ((x2-x)**2+(y2-y)**2)**0.5 < 10:
+                    cv.line(img,(x1,y1),(x2,y2),(0,255,255),5)
+                    cv.circle(img, (x, y), int(1*r), (0, 255, 255), 5)
+                    self.reference_x = (x2+x)/2
+                    self.reference_y = (y2+y)/2
+                    break
         pass
 
     def findDistances(self) -> List:
