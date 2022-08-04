@@ -8,7 +8,7 @@ class ConveyerControl():
         self.delay_time = delay_time
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.OUTPUT)
-        
+
         pass
 
     def load(self):

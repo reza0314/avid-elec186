@@ -32,16 +32,16 @@ class StepperControl():
         return
 
     def stepForward(self) -> None:
-        GPIO.output(self.direction_pin,GPIO.HIGH)
-        GPIO.output(self.signal_pin,GPIO.HIGH)
+        GPIO.output(self.direction_pin, GPIO.HIGH)
+        GPIO.output(self.signal_pin, GPIO.HIGH)
         sleep(0.01)
-        GPIO.output(self.signal_pin,GPIO.LOW)
+        GPIO.output(self.signal_pin, GPIO.LOW)
 
-    def stepBackward(self)-> None:
-        GPIO.output(self.direction_pin,GPIO.LOW)
-        GPIO.output(self.signal_pin,GPIO.HIGH)
+    def stepBackward(self) -> None:
+        GPIO.output(self.direction_pin, GPIO.LOW)
+        GPIO.output(self.signal_pin, GPIO.HIGH)
         sleep(0.01)
-        GPIO.output(self.signal_pin,GPIO.LOW)
+        GPIO.output(self.signal_pin, GPIO.LOW)
 
     def test(self) -> int:
         if(self.state):

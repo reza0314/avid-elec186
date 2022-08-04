@@ -9,6 +9,7 @@ class ToolControl():
         pass
 
     def pick(self):
-        GPIO.output(self.pin,GPIO.HIGH)
+        GPIO.output(self.pin, GPIO.HIGH)
+
     def place(self):
-        GPIO.output(self.pin,GPIO.LOW)
+        GPIO.output(self.pin, GPIO.LOW)
