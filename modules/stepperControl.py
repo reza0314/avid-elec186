@@ -9,49 +9,36 @@ class StepperControl():
         self.direction_pin = direction_pin
         self.limit_switch_pin = limit_switch_pin
         self.state = True
-        GPIO.setmode(GPIO.BCM)
+        GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.signal_pin, GPIO.OUT)
         GPIO.setup(self.direction_pin, GPIO.OUT)
         GPIO.setup(self.limit_switch_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         self.position = 0
         self.calibrate_motor()
-        pass
 
     def calibrate_motor(self) -> None:
-        # TODO: add code for calibration
-        # while GPIO.input(self.limit_switch_pin):
-        #     sleep(0.001)
+        while GPIO.input(self.limit_switch_pin):
+            self.stepBackward()
         self.position = 0
+        print("calibration done")
 
-    def setDirection(self, direction: str) -> None:
-        # if direction == "forward":
-        #     GPIO.output(self.direction_pin, GPIO.HIGH)
-        # elif direction == "backward":
-        #     GPIO.output(self.direction_pin, GPIO.LOW)
-
-        return
-
-    def stepForward(self) -> None:
+    def stepForward(self) -> int:
         GPIO.output(self.direction_pin, GPIO.HIGH)
         GPIO.output(self.signal_pin, GPIO.HIGH)
         sleep(0.01)
         GPIO.output(self.signal_pin, GPIO.LOW)
+        sleep(0.01)
+        self.position += 1
+        return self.position
 
-    def stepBackward(self) -> None:
+    def stepBackward(self) -> int:
         GPIO.output(self.direction_pin, GPIO.LOW)
         GPIO.output(self.signal_pin, GPIO.HIGH)
         sleep(0.01)
         GPIO.output(self.signal_pin, GPIO.LOW)
+        sleep(0.01)
+        self.position -= 1
+        return self.position
 
-    def test(self) -> int:
-        if(self.state):
-            # GPIO.output(self.signal_pin,GPIO.HIGH)
-            # self.state = ! self.state
-            pass
-        else:
-            # GPIO.output(self.signal_pin,GPIO.LOW)
-            # self.state = ! self.state
-            pass
-        print(f'{self.position}')
-        self.position += 1
+    def getPosition(self) -> int:
         return self.position

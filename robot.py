@@ -1,7 +1,7 @@
 from time import sleep
 from modules import Vision, ToolControl, StepperControl, ConveyerControl
 from configparser import ConfigParser
-from RPi.GPIO import cleanup
+from RPi.GPIO import cleanup, setwarnings
 
 
 class Robot():
@@ -12,6 +12,7 @@ class Robot():
 
         lead = float(config['motor-calibration']['lead'])
         step = float(config['motor-calibration']['step'])
+        self.sleep_time = float(config['delay']['normal_delay'])
         self.mm_to_step = 360/(lead*step)
 
         self.final_x_dest = int(
@@ -20,33 +21,74 @@ class Robot():
             config['final-destination']['y_position'])*(self.mm_to_step)
         self.final_z_dest = int(
             config['final-destination']['z_position'])*(self.mm_to_step)
+        self.z_direction_distance = float(
+            config['motor-calibration']['z_direction_distance'])
 
         # Initializing Peripherals
         self.robot_vision = Vision(
-            config['Vision-calibration']['x_length'],
-            config['Vision-calibration']['y_length'],
-            config['Vision-calibration']['circle_diameter'])
+            int(config['Vision-calibration']['x_length']),
+            int(config['Vision-calibration']['y_length']),
+            int(config['Vision-calibration']['circle_diameter']))
 
-        self.x_motor = StepperControl(5, 5, 5)
+        self.x_motor = StepperControl(int(config['GPIOS']['x_stepper_signal_pin']),
+                                      int(config['GPIOS']
+                                          ['x_stepper_direction_pin']),
+                                      int(config['GPIOS']['x_stepper_limit_switch_pin']))
         self.x_motor_position = 0
-
-        self.y_motor = StepperControl(5, 5, 5)
+        self.x_motor.calibrate_motor()
+        self.y_motor = StepperControl(int(config['GPIOS']['y_stepper_signal_pin']),
+                                      int(config['GPIOS']
+                                          ['y_stepper_direction_pin']),
+                                      int(config['GPIOS']['y_stepper_limit_switch_pin']))
         self.y_motor_position = 0
 
-        self.z_motor = StepperControl(5, 5, 5)
+        self.z_motor = StepperControl(int(config['GPIOS']['z_stepper_signal_pin']),
+                                      int(config['GPIOS']
+                                          ['z_stepper_direction_pin']),
+                                      int(config['GPIOS']['z_stepper_limit_switch_pin']))
         self.z_motor_position = 0
 
-        self.tool = ToolControl(6)
+        self.tool = ToolControl(int(config['GPIOS']['tool_relay_pin']))
 
-        self.conveyer = ConveyerControl(7)
+        self.conveyer = ConveyerControl(
+            int(config['GPIOS']['conveyer_relay_pin']), float(config['delays']['load_delay']))
+
+        sleep(2)
+        print("initialization done")
+
         # Starting The Robot Loop
         while True:
             self.robotLoop()
+        self.test()
+
+    def test(self) -> None:
+        sleep(3)
+        x_position = 300
+        x_position_reached = False
+        # print('Test')
+
+        while (not x_position_reached):
+            if(self.x_motor_position > x_position):
+                self.x_motor_position = self.x_motor.stepBackward()
+            elif (self.x_motor_position < x_position):
+                self.x_motor_position = self.x_motor.stepForward()
+            else:
+                x_position_reached = True
+            # print(self.x_motor.position)
+        x_position = 100
+        x_position_reached = False
+        while (not x_position_reached):
+            if(self.x_motor_position > x_position):
+                self.x_motor_position = self.x_motor.stepBackward()
+            elif (self.x_motor_position < x_position):
+                self.x_motor_position = self.x_motor.stepForward()
+            else:
+                x_position_reached = True
+            # print(self.x_motor.position)
 
     def robotLoop(self) -> None:
 
         circle = self.robot_vision.findCircle()
-        # TODO: change the code for getting positions
         if circle == None:
             self.conveyer.load()
             return
@@ -70,17 +112,17 @@ class Robot():
                 self.y_motor_position = self.y_motor.stepForward()
             else:
                 y_position_reached = True
-        sleep(0.5)
+        sleep(self.sleep_time)
         # Reached to position
         z_position_reached = False
         while (not z_position_reached):
-            if(self.z_motor_position < self.z_position):
+            if(self.z_motor_position < self.z_direction_distance):
                 self.z_motor.stepForward()
             else:
                 z_position_reached = True
-        sleep(0.5)
+        sleep(self.sleep_time)
         self.tool.pick()
-        sleep(0.5)
+        sleep(self.sleep_time)
         z_position_reached = False
         while (not z_position_reached):
             if(self.z_motor_position > 0):
@@ -104,16 +146,16 @@ class Robot():
                 self.y_motor_position = self.y_motor.stepForward()
             else:
                 y_position_reached = True
-        sleep(0.5)
+        sleep(self.sleep_time)
         z_position_reached = False
         while (not z_position_reached):
             if(self.z_motor_position < self.final_z_dest):
                 self.z_motor.stepForward()
             else:
                 z_position_reached = True
-        sleep(0.5)
+        sleep(self.sleep_time)
         self.tool.place()
-        sleep(0.5)
+        sleep(self.sleep_time)
         z_position_reached = False
         while (not z_position_reached):
             if(self.z_motor_position < 0):
@@ -131,5 +173,7 @@ def sigintHandler(signal, frame):
 if __name__ == "__main__":
     import sys
     import signal
+    setwarnings(False)
     signal.signal(signal.SIGINT, sigintHandler)
+    print("here")
     Robot()
