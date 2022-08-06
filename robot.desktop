@@ -1,0 +1,2 @@
+Exec= "python ./robot.py"
+Icon= ./icon.png

@@ -6,3 +6,8 @@
 sudo apt install ffmpeg fswebcam
 pip install opencv-contrib-python
 ```
+
+icon downloaded from:
+``` bash
+https://icons8.com/
+```
