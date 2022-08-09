@@ -16,6 +16,8 @@ chmod +x install.sh
 Right click on __install.sh__ file go to __Properties__ option. Then go to __Permissions__ tab and change __Execute__ to __Anyone__ and click ok.
 double click on __install.sh__ file and then select __Execute in Terminal__ option.
 
+## Executing the program
 After this the file can be executed by going to __menu->Accessories->Robot__ that have a raspberry pi icon.
 
+## exiting the program 
 you can exit the program using __Ctrl+C__.
