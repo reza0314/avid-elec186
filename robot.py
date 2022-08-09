@@ -12,7 +12,7 @@ class Robot():
 
         lead = float(config['motor-calibration']['lead'])
         step = float(config['motor-calibration']['step'])
-        self.sleep_time = float(config['delay']['normal_delay'])
+        self.sleep_time = float(config['delays']['normal_delay'])
         self.mm_to_step = 360/(lead*step)
 
         self.final_x_dest = int(
@@ -25,10 +25,15 @@ class Robot():
             config['motor-calibration']['z_direction_distance'])
 
         # Initializing Peripherals
-        self.robot_vision = Vision(
-            int(config['Vision-calibration']['x_length']),
-            int(config['Vision-calibration']['y_length']),
-            int(config['Vision-calibration']['circle_diameter']))
+        try:
+            self.robot_vision = Vision(
+                int(config['Vision-calibration']['x_length']),
+                int(config['Vision-calibration']['y_length']),
+                int(config['Vision-calibration']['circle_diameter']))
+        except:
+            while True:
+                print("Camera Error!")
+                sleep(10)
 
         self.x_motor = StepperControl(int(config['GPIOS']['x_stepper_signal_pin']),
                                       int(config['GPIOS']
@@ -52,14 +57,15 @@ class Robot():
 
         self.conveyer = ConveyerControl(
             int(config['GPIOS']['conveyer_relay_pin']), float(config['delays']['load_delay']))
-
+        self.circles = []
         sleep(2)
         print("initialization done")
 
         # Starting The Robot Loop
         while True:
             self.robotLoop()
-        self.test()
+            sleep(2)
+        # self.test()
 
     def test(self) -> None:
         sleep(3)
@@ -88,10 +94,11 @@ class Robot():
 
     def robotLoop(self) -> None:
 
-        circle = self.robot_vision.findCircle()
-        if circle == None:
+        self.circles = self.robot_vision.findCircles()
+        if self.circles == None:
             self.conveyer.load()
             return
+        circle = self.circles.pop(0)
         x_position = circle[0]
         y_position = circle[1]
         x_position = x_position*(self.mm_to_step)

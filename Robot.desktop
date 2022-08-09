@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Robot
+Comment=This application controls the robot in terminal
+Terminal=true
+Path=/usr/share/Robot
+Icon=icon.png
+Exec=python robot.py
+Categories=Utility

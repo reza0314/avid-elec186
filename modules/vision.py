@@ -17,11 +17,12 @@ class Vision():
         self.x_distance_per_pixel = x_distance
         self.y_distance_per_pixel = y_distance
         self.circle_radius = circle_radius
-
+        self.findReference()
         # print(self.x_distance_per_pixel,
         #       self.y_distance_per_pixel, self.circle_radius)
 
-    def findCircle(self) -> List:
+    def findCircles(self) -> List:
+        # taking picture
         _, image = self.cam.read()
         # Image Processing
         processed_image = cvtColor(image, COLOR_BGR2GRAY)
@@ -36,9 +37,16 @@ class Vision():
         max_radius = min(processed_image.shape)//9
         circles = HoughCircles(processed_image, HOUGH_GRADIENT,
                                2, 50, param1=500, param2=1, minRadius=0, maxRadius=max_radius)
+        results = []
         for(x, y, r) in circles:
             if gray[y][x] > 200:
-                return [(x-self.reference_x)*(self.x_distance_per_pixel), (y-self.reference_y)*(self.x_distance_per_pixel), r]
+                results.append([(x-self.reference_x)*(self.x_distance_per_pixel),
+                               (y-self.reference_y)*(self.x_distance_per_pixel), r])
+        if len(results) > 0:
+            print(f'{len(results)} ceramics found at:', end=" ")
+            for i in results:
+                print(f' (x = {i[0]}, y = {i[1]})', end=' ')
+            return results
         return None
 
     def test(self):
