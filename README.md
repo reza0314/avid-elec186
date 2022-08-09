@@ -2,16 +2,16 @@
 
 ## installation process
 
-###Method 1
+### Method 1
 
 open terminal where you copied file.
-```bash
+``` bash
 chmod +x install.sh
 ./install.sh
 ```
 
 
-###Method 2
+### Method 2
 
 Right click on __install.sh__ file go to __Properties__ option. Then go to __Permissions__ tab and change __Execute__ to __Anyone__ and click ok.
 double click on __install.sh__ file and then select __Execute in Terminal__ option.
