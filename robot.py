@@ -96,6 +96,7 @@ class Robot():
 
         self.circles = self.robot_vision.findCircles()
         if self.circles == None:
+            print("No ceramics found, reloading...")
             self.conveyer.load()
             return
         circle = self.circles.pop(0)

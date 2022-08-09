@@ -1,13 +1,21 @@
 # pick and place robot with AI
 
-## Installing packages
+## installation process
 
+###Method 1
+
+open terminal where you copied file.
 ```bash
-sudo apt install ffmpeg fswebcam
-pip install opencv-contrib-python
+chmod +x install.sh
+./install.sh
 ```
 
-icon downloaded from:
-``` bash
-https://icons8.com/
-```
+
+###Method 2
+
+Right click on __install.sh__ file go to __Properties__ option. Then go to __Permissions__ tab and change __Execute__ to __Anyone__ and click ok.
+double click on __install.sh__ file and then select __Execute in Terminal__ option.
+
+After this the file can be executed by going to __menu->Accessories->Robot__ that have a raspberry pi icon.
+
+you can exit the program using __Ctrl+C__.
