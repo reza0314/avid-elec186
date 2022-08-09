@@ -5,6 +5,6 @@ Name=Robot
 Comment=This application controls the robot in terminal
 Terminal=true
 Path=/usr/share/Robot
-Icon=icon.png
+Icon=rpi
 Exec=python robot.py
 Categories=Utility
