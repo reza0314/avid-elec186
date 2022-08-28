@@ -4,6 +4,10 @@ from configparser import ConfigParser
 from RPi.GPIO import cleanup, setwarnings
 
 
+# test all three dimentions of the robot
+# test the pick and place mechanism
+# test loading mechanism
+
 class Robot():
     def __init__(self) -> None:
         # Reading Configuration File
@@ -46,13 +50,13 @@ class Robot():
                                           ['y_stepper_direction_pin']),
                                       int(config['GPIOS']['y_stepper_limit_switch_pin']))
         self.y_motor_position = 0
-
+        # self.y_motor.clibrate_motor()
         self.z_motor = StepperControl(int(config['GPIOS']['z_stepper_signal_pin']),
                                       int(config['GPIOS']
                                           ['z_stepper_direction_pin']),
                                       int(config['GPIOS']['z_stepper_limit_switch_pin']))
         self.z_motor_position = 0
-
+        # self.z_motor.clibrate_motor()
         self.tool = ToolControl(int(config['GPIOS']['tool_relay_pin']))
 
         self.conveyer = ConveyerControl(
@@ -62,18 +66,23 @@ class Robot():
         print("initialization done")
 
         # Starting The Robot Loop
+        # comment these three lines and un comment self.test()
         while True:
             self.robotLoop()
             sleep(2)
         # self.test()
 
     def test(self) -> None:
+        
         sleep(3)
         x_position = 300
+        # y_position = 50
+        # code for the y motor
         x_position_reached = False
         # print('Test')
 
         while (not x_position_reached):
+            # add code for y motor
             if(self.x_motor_position > x_position):
                 self.x_motor_position = self.x_motor.stepBackward()
             elif (self.x_motor_position < x_position):
@@ -81,9 +90,12 @@ class Robot():
             else:
                 x_position_reached = True
             # print(self.x_motor.position)
+        # add code for picking the ceramics
+        # go to final destnations
         x_position = 100
         x_position_reached = False
         while (not x_position_reached):
+            #add code for y motor also
             if(self.x_motor_position > x_position):
                 self.x_motor_position = self.x_motor.stepBackward()
             elif (self.x_motor_position < x_position):
@@ -91,6 +103,8 @@ class Robot():
             else:
                 x_position_reached = True
             # print(self.x_motor.position)
+        # add code for placing compunents
+        # add code for reloading
 
     def robotLoop(self) -> None:
 
