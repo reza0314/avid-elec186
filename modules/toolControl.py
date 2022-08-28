@@ -12,3 +12,13 @@ class ToolControl():
 
     def place(self):
         GPIO.output(self.pin, GPIO.LOW)
+       
+    
+if __name__ == "__main__":
+    tool = ToolControl(9)
+    from time import sleep
+    while True:
+        tool.pick()
+        sleep(2)
+        tool.place()
+        sleep(2)
