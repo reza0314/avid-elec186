@@ -42,3 +42,14 @@ class StepperControl():
 
     def getPosition(self) -> int:
         return self.position
+   
+if __name__ == "__main__":
+    stepper = StepperControl(40,38,36)
+    while True:
+        for _ in range(200):
+            stepper.stepForward()
+            sleep(0.01)
+        for _ in range(200):
+            stepper.stepBackward()
+            sleep(0.01)
+#1.8 degree per step
