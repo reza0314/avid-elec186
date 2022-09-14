@@ -4,7 +4,7 @@ from time import sleep
 
 class StepperControl():
 
-    def __init__(self, signal_pin: int, direction_pin: int, limit_switch_pin: int,limit_direction:str) -> None:
+    def __init__(self, signal_pin: int, direction_pin: int, limit_switch_pin: int, limit_direction: str) -> None:
         self.signal_pin = signal_pin
         self.direction_pin = direction_pin
         self.limit_switch_pin = limit_switch_pin
@@ -18,10 +18,10 @@ class StepperControl():
         self.calibrate_motor()
 
     def calibrate_motor(self) -> None:
-        if limit_direction == "backward":
+        if self.limit_direction == "backward":
             while GPIO.input(self.limit_switch_pin):
                 self.stepBackward()
-        elif limit_direction == "forward":
+        elif self.limit_direction == "forward":
             while GPIO.input(self.limit_switch_pin):
                 self.stepForward()
         else :
