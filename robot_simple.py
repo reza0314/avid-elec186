@@ -96,20 +96,22 @@ class Robot():
         self.x_motor = StepperControl(int(config['GPIOS']['x_stepper_signal_pin']),
                                       int(config['GPIOS']
                                           ['x_stepper_direction_pin']),
-                                      int(config['GPIOS']['x_stepper_limit_switch_pin']))
+                                      int(config['GPIOS']['x_stepper_limit_switch_pin']),
+                                      config['GPIOS']['x_limit_direction'])
         self.x_motor_position = 0
-        self.x_motor.calibrate_motor()
+        # self.x_motor.calibrate_motor()
         self.y_motor = StepperControl(int(config['GPIOS']['y_stepper_signal_pin']),
                                       int(config['GPIOS']
                                           ['y_stepper_direction_pin']),
-                                      int(config['GPIOS']['y_stepper_limit_switch_pin']))
+                                      int(config['GPIOS']['y_stepper_limit_switch_pin']),
+                                      config['GPIOS']['y_limit_direction'])
         self.y_motor_position = 0
         # self.y_motor.clibrate_motor()
         self.z_motor = StepperControl(int(config['GPIOS']['z_stepper_signal_pin']),
                                       int(config['GPIOS']
                                           ['z_stepper_direction_pin']),
-                                      int(config['GPIOS']['z_stepper_limit_switch_pin']))
-        self.z_motor_position = 0
+                                      int(config['GPIOS']['z_stepper_limit_switch_pin']),
+                                      config['GPIOS']['z_limit_direction'])
         # self.z_motor.clibrate_motor()
         self.tool = ToolControl(int(config['GPIOS']['tool_relay_pin']))
 

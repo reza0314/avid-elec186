@@ -4,11 +4,12 @@ from time import sleep
 
 class StepperControl():
 
-    def __init__(self, signal_pin: int, direction_pin: int, limit_switch_pin: int) -> None:
+    def __init__(self, signal_pin: int, direction_pin: int, limit_switch_pin: int,limit_direction:str) -> None:
         self.signal_pin = signal_pin
         self.direction_pin = direction_pin
         self.limit_switch_pin = limit_switch_pin
         self.state = True
+        self.limit_direction = limit_direction
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.signal_pin, GPIO.OUT)
         GPIO.setup(self.direction_pin, GPIO.OUT)
@@ -17,8 +18,15 @@ class StepperControl():
         self.calibrate_motor()
 
     def calibrate_motor(self) -> None:
-        while GPIO.input(self.limit_switch_pin):
-            self.stepBackward()
+        if limit_direction == "backward":
+            while GPIO.input(self.limit_switch_pin):
+                self.stepBackward()
+        elif limit_direction == "forward":
+            while GPIO.input(self.limit_switch_pin):
+                self.stepForward()
+        else :
+            print("There was a problem with initilization")
+            exit()
         self.position = 0
         print("calibration done")
 
