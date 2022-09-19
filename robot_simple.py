@@ -139,13 +139,21 @@ class Robot():
         
         sleep(3)
         x_position = 300
-        # y_position = 50
+        y_position = 50
         # code for the y motor
         x_position_reached = False
+        y_position_reached = False
         # print('Test')
 
-        while (not x_position_reached):
+        while (not x_position_reached) or (not y_position_reached):
             # add code for y motor
+            if(self.y_motor_position > y_position):
+                self.y_motor_position = self.y_motor.stepBackward()
+            elif (self.y_motor_position < y_position):
+                self.y_motor_position = self.y_motor.stepForward()
+            else:
+                y_position_reached = True
+                
             if(self.x_motor_position > x_position):
                 self.x_motor_position = self.x_motor.stepBackward()
             elif (self.x_motor_position < x_position):
@@ -155,10 +163,27 @@ class Robot():
             # print(self.x_motor.position)
         # add code for picking the ceramics
         # go to final destnations
+        
+        
+        ################
+        # change the values for final destenation
+        ################
         x_position = 100
+        y_position = 0
+        # code for the y motor
         x_position_reached = False
-        while (not x_position_reached):
-            #add code for y motor also
+        y_position_reached = False
+        # print('Test')
+
+        while (not x_position_reached) or (not y_position_reached):
+            # add code for y motor
+            if(self.y_motor_position > y_position):
+                self.y_motor_position = self.y_motor.stepBackward()
+            elif (self.y_motor_position < y_position):
+                self.y_motor_position = self.y_motor.stepForward()
+            else:
+                y_position_reached = True
+                
             if(self.x_motor_position > x_position):
                 self.x_motor_position = self.x_motor.stepBackward()
             elif (self.x_motor_position < x_position):
